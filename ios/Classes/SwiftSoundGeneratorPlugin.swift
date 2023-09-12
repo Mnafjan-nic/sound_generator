@@ -68,7 +68,7 @@ public class SwiftSoundGeneratorPlugin: NSObject, FlutterPlugin {
       case "setFrequency":
         let args = call.arguments as! [String: Any]
         // self.oscillator.frequency = args["frequency"] as! Double
-        self.oscillator.frequencyParameter?.setImmediate(args["frequency"] as! Double)
+        try! oscillator.setParameterImmediately(.frequency, value: args["frequency"] as! Double)
         result(nil);
         break;
       case "setWaveform":
