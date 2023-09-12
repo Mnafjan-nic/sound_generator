@@ -11,7 +11,6 @@ public class SwiftSoundGeneratorPlugin: NSObject, FlutterPlugin {
   var oscillator: AKOscillator = AKOscillator();
   var panner: AKPanner?;
   var mixer: AKMixer?;
-  var fadeTimer: Timer?
 
 
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -31,23 +30,6 @@ public class SwiftSoundGeneratorPlugin: NSObject, FlutterPlugin {
     self.onOneCycleDataHandler = BetterEventChannel(name: "io.github.mertguner.sound_generator/onOneCycleDataHandler", messenger: registrar.messenger())
     registrar.addMethodCallDelegate(self, channel: methodChannel)
   }
-
-  func fadeOut(fadeDuration: TimeInterval? = 1.0, completion: (()->Void)? = nil) {
-        fadeTimer?.invalidate()
-        let increment = 0.1 / fadeDuration!
-        fadeTimer = Timer.scheduledTimer(withTimeInterval: 0.15, repeats: true) { fadeOut in
-            let newVolume =  self.mixer!.volume - Float(increment)
-            if newVolume > 0.0 {
-                self.mixer!.volume = newVolume
-            }
-            else {
-                self.mixer!.volume = 0.0
-                fadeOut.invalidate()
-                self.fadeTimer = nil
-                completion?()
-            }
-        }
-    }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
@@ -75,9 +57,7 @@ public class SwiftSoundGeneratorPlugin: NSObject, FlutterPlugin {
         result(nil);
         break;
       case "stop":
-        // fadeOut(fadeDuration: 0.5) {
-          self.oscillator.stop();
-        // }
+        self.oscillator.stop();
         onChangeIsPlaying!.sendEvent(event: false)
         result(nil);
         break;
