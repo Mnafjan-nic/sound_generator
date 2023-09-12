@@ -30,6 +30,23 @@ public class SwiftSoundGeneratorPlugin: NSObject, FlutterPlugin {
     registrar.addMethodCallDelegate(self, channel: methodChannel)
   }
 
+  func fadeOut(fadeDuration: TimeInterval? = 1.0, completion: (()->Void)? = nil) {
+        fadeTimer?.invalidate()
+        let increment = 0.1 / fadeDuration!
+        fadeTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { fadeOut in
+            let newVolume =  self.mixer!.volume - Float(increment)
+            if newVolume > 0.0 {
+                self.mixer!.volume = Float(newVolume)
+            }
+            else {
+                self.mixer!.volume = 0.0
+                fadeOut.invalidate()
+                self.fadeTimer = nil
+                completion?()
+            }
+        }
+    }
+
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
       case "init":
@@ -56,7 +73,9 @@ public class SwiftSoundGeneratorPlugin: NSObject, FlutterPlugin {
         result(nil);
         break;
       case "stop":
-        self.oscillator.stop();
+        fadeOut(fadeDuration: 0.5) {
+          self.oscillator.stop();
+        }
         onChangeIsPlaying!.sendEvent(event: false)
         result(nil);
         break;
