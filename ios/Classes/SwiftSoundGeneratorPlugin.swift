@@ -11,6 +11,8 @@ public class SwiftSoundGeneratorPlugin: NSObject, FlutterPlugin {
   var oscillator: AKOscillator = AKOscillator();
   var panner: AKPanner?;
   var mixer: AKMixer?;
+  var fadeTimer: Timer?
+
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     /*let instance =*/ _ = SwiftSoundGeneratorPlugin(registrar: registrar)
