@@ -38,7 +38,7 @@ public class SwiftSoundGeneratorPlugin: NSObject, FlutterPlugin {
         fadeTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { fadeOut in
             let newVolume =  self.mixer!.volume - Float(increment)
             if newVolume > 0.0 {
-                self.mixer!.volume = Float(newVolume)
+                self.mixer!.volume = newVolume
             }
             else {
                 self.mixer!.volume = 0.0
