@@ -36,6 +36,7 @@ public class SwiftSoundGeneratorPlugin: NSObject, FlutterPlugin {
         //let args = call.arguments as! [String: Any]
         //let sampleRate = args["sampleRate"] as Int
         self.oscillator.frequency = 400
+        self.oscillator.rampDuration = 0.0
         do {
             try AKManager.start()
             result(true);
@@ -67,8 +68,7 @@ public class SwiftSoundGeneratorPlugin: NSObject, FlutterPlugin {
         break;
       case "setFrequency":
         let args = call.arguments as! [String: Any]
-        // self.oscillator.frequency = args["frequency"] as! Double
-        try! oscillator.setParameterImmediately(.frequency, value: args["frequency"] as! Double)
+        self.oscillator.frequency = args["frequency"] as! Double
         result(nil);
         break;
       case "setWaveform":
