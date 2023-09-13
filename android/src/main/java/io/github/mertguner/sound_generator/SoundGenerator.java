@@ -125,6 +125,9 @@ public class SoundGenerator {
 
         isPlaying = true;
 
+        generator.resetFrequency();
+        generator.updateOnce();
+
         bufferThread = new Thread(new Runnable() {
             @Override
             public void run() {
