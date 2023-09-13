@@ -65,6 +65,11 @@ public class signalDataGenerator {
         createOneCycleData();
     }
 
+    public void updateOnce() {
+        updateData();
+        createOneCycleData();
+    }
+
     private void updateData() {
         creatingNewData = true;
         for (int i = 0; i < bufferSamplesSize; i++) {
